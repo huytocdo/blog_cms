@@ -10,6 +10,7 @@ const ImageList = () => import('./views/Dashboard/ImageList.vue');
 const ImageUploadNew = () => import('./views/Dashboard/ImageUploadNew.vue');
 const CategoryList = () => import('./views/Dashboard/CategoryList.vue');
 const CategoryCreateNew = () => import('./views/Dashboard/CategoryCreateNew.vue');
+const TestEditor = () => import('./views/TestEditor.vue');
 
 Vue.use(VueRouter);
 
@@ -37,42 +38,43 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'post list',
+        name: 'Dashboard',
         component: PostList
       },
       {
         path: 'post-list',
-        name: 'post list',
+        name: 'Quản lý bài viết',
         component: PostList
       },
       {
         path: 'create-new-post',
-        name: 'create new post',
+        name: 'Tạo bài viết mới',
         component: PostCreateNew
       },
       {
         path: 'image-list',
-        name: 'image list',
+        name: 'Quản lý hình',
         component: ImageList
       },
       {
         path: 'upload-image',
-        name: 'upload image',
+        name: 'Upload hình',
         component: ImageUploadNew
       },
       {
         path: 'category-list',
-        name: 'category list',
+        name: 'Quản lý danh mục',
         component: CategoryList
       },
       {
         path: 'create-new-category',
-        name: 'create new category',
+        name: 'Tạo danh mục mới',
         component: CategoryCreateNew
       },
     ] 
   },
-  { path: '/login', component: Login }
+  { path: '/login', component: Login },
+  { path: '/test-editor', component: TestEditor }
 ]
 
 const router = new VueRouter({
@@ -84,7 +86,12 @@ router.beforeEach((to, from, next) => {
   const isLogin = store.getters['authenticate/isLogin'];
   if(to.path !== '/login') {
     if(!isLogin) {
-      next(`/login?redirect=${to.path}`)
+      next(`/login?redirect=${to.path}`);
+    }
+  }
+  if(to.path === '/login') {
+    if(isLogin) {
+      next(`/dashboard`);
     }
   }
   next();

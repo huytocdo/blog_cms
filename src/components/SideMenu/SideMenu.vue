@@ -71,11 +71,9 @@ export default {
     elMenuItem: MenuItem,
     elMenuItemGroup: MenuItemGroup
   },
-  props: ['isCollapse'],
+  props: ['isCollapse', 'logout'],
   methods: {
-    logout() {
-      console.log('logout clicked');
-    }
+
   }
 }
 </script>

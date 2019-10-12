@@ -81,9 +81,6 @@ export default {
     async submitForm(formName) {
       console.log(formName);
       console.log(this.$refs[formName]);
-      // this.$refs[formName].validate(async (valid) => {
-        // console.log(valid);
-        // if(valid) {
           try {
             const { login, loginForm } = this;
             const isLogin = await login(loginForm);

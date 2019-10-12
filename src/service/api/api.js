@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(function(config) {
   const token = authenStore.state.token
   if(token) {
-    config.headers.common['Authorization'] = `bearer ${token}`
+    config.headers.common['Authorization'] = `Bearer ${token}`
   }
   return config;
 })

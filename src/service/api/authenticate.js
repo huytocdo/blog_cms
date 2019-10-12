@@ -7,3 +7,7 @@ export const login = (email, password) => {
     }
   })
 }
+
+export const logout = () => {
+  return api.get('/users/logout');
+}

@@ -1,17 +1,20 @@
 import * as authenApi from '@/service/api/authenticate';
+import Cookies from "js-cookie";
 const state = {
-  token: localStorage.getItem('user-token') || '',
+  token: Cookies.get('jwt') || '',
   user: null,
   errorMsg: '',
   loading: false
 }
 
 const mutations = {
-  'SET_TOKEN'(state, value) {
-    localStorage.setItem('user-token', value);
-    state.token = value;
+  'SET_TOKEN'(state, {token, expires}) {
+    expires = parseInt(expires, 10);
+    Cookies.set('jwt', token, {expires: expires})
+    state.token = token;
   },
   'CLEAR_TOKEN'(state) {
+    Cookies.remove('jwt')
     state.token = '';
   },
   'SET_USER'(state, user) {
@@ -42,7 +45,7 @@ const actions = {
       const {status, data} = await authenApi.login(email, password);
       commit('CLEAR_LOADING');
       if(status === 200) {
-        commit('SET_TOKEN', data.token);
+        commit('SET_TOKEN', { token: data.token, expires: data.expires });
         commit('SET_USER', data.data.user);
         return true;
       } else {
@@ -51,6 +54,26 @@ const actions = {
       }
     } catch (err) {
       commit('CLEAR_LOADING');
+      commit('SET_ERROR', err);
+      return false;
+    }
+  },
+  async 'LOGOUT'({commit}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      const {status, data} = await authenApi.logout();
+      commit('CLEAR_LOADING');
+      if(status === 200) {
+        commit('CLEAR_USER');
+        commit('CLEAR_TOKEN');
+        return true;
+      }
+      console.log(status, data)
+    } catch(err) {
+      commit('CLEAR_LOADING');
+      commit('CLEAR_USER');
+      commit('CLEAR_TOKEN');
       commit('SET_ERROR', err);
       return false;
     }

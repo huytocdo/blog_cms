@@ -1,6 +1,9 @@
 <template>
   <el-container style="height: 100vh">
-    <app-side-menu :isCollapse="isCollapse" />
+    <app-side-menu 
+      :isCollapse="isCollapse" 
+      :logout="logout"
+    />
     <el-container>
       <el-header class="el-header">
         <app-header :toggleCollapse="toggleCollapse" />
@@ -14,6 +17,7 @@
 
 <script>
 import { Container, Main, Header, Table, TableColumn, Dropdown, DropdownItem, DropdownMenu, Aside, Button } from 'element-ui';
+import {mapActions, mapState, mapGetters} from 'vuex';
 import AppSideMenu from '@/components/SideMenu/SideMenu.vue';
 import AppHeader from '@/components/Header/Header.vue';
   export default {
@@ -36,8 +40,18 @@ import AppHeader from '@/components/Header/Header.vue';
       }
     },
     methods: {
+      ...mapActions('authenticate', {
+        logoutStore: 'LOGOUT'
+      }),
       toggleCollapse() {
         this.isCollapse = !this.isCollapse;
+      },
+      logout() {
+        if(this.logoutStore()) {
+          this.$router.push('/login');
+        } else {
+          //TODO ERROR
+        }
       }
     }
   };
@@ -53,8 +67,8 @@ import AppHeader from '@/components/Header/Header.vue';
   }
   .el-main {
     background-color: #fff;
-    border-radius: 12px 12px 0 0;
-    padding: 15px;
+    /* border-radius: 12px 12px 0 0; */
+    padding: 0;
     margin: 0 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     height: 100%;

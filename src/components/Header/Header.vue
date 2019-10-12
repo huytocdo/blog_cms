@@ -6,17 +6,6 @@
     <el-col :span="23">
       <h2>{{$route.name}}</h2>
     </el-col>
-    <!-- <el-col :span="1" style="text-align: right">
-      <el-dropdown trigger="click">
-        <el-button type="primary" icon="el-icon-user-solid" circle>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item disabled>Profile</el-dropdown-item>
-          <el-dropdown-item disabled>Change Password</el-dropdown-item>
-          <el-dropdown-item divided>Logout</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-col> -->
   </el-row>
 </template>
 
@@ -29,9 +18,6 @@ export default {
     elCol: Col
   },
   props: ['toggleCollapse'],
-  mounted() {
-    console.log(this.$route);
-  }
 }
 </script>
 
@@ -39,6 +25,7 @@ export default {
   h2 {
     text-align: center;
     font-size: 24px;
-    text-transform: uppercase
+    text-transform: capitalize;
+    font-weight: bold;
   }
 </style>

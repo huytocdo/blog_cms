@@ -88,7 +88,7 @@ export default {
                     iframe.contentWindow.document.close();
 
                     const cssLink = document.createElement("link");
-                    cssLink.href = "https://assets-cdn.github.com/assets/gist-embed-1baaff35daab552f019ad459494450f1.css"; 
+                    cssLink.href = "/css/gist.css"; 
                     cssLink.rel = "stylesheet"; 
                     cssLink.type = "text/css"; 
                     iframe.contentWindow.document.head.appendChild(cssLink);
@@ -112,10 +112,6 @@ export default {
     },
     beforeMount () {
         this.window = window;
-        window.addEventListener('scroll', this.handleScroll);
-    },
-    beforeDestroy () {
-        window.removeEventListener('scroll', this.handleScroll);
     }
 }
 </script>

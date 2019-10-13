@@ -113,6 +113,7 @@
 .medium-editor-container iframe{
   width: 1px;
   min-width: 100%;
+  border: none;
 }
 
 .medium-editor-container blockquote {

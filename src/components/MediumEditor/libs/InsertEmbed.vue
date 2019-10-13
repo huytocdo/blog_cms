@@ -11,7 +11,7 @@
                     :editor="editor"
                     :insert="insert"
                     :editorRef="editorRef"
-                    :uploadUrl="uploadUrl"
+                    :customAction="customAction"
                     :handler="handler"
                     v-on:uploaded="uploadCallback"
                     v-on:imageClick="imageClickHandler"
@@ -71,7 +71,7 @@ export default {
     },
     props: [
         'editor',
-        'uploadUrl',
+        'customAction',
         'editorRef',
         'onChange'
     ],

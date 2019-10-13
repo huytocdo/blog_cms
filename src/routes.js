@@ -10,7 +10,6 @@ const ImageList = () => import('./views/Dashboard/ImageList.vue');
 const ImageUploadNew = () => import('./views/Dashboard/ImageUploadNew.vue');
 const CategoryList = () => import('./views/Dashboard/CategoryList.vue');
 const CategoryCreateNew = () => import('./views/Dashboard/CategoryCreateNew.vue');
-const TestEditor = () => import('./views/TestEditor.vue');
 
 Vue.use(VueRouter);
 
@@ -73,8 +72,7 @@ const routes = [
       },
     ] 
   },
-  { path: '/login', component: Login },
-  { path: '/test-editor', component: TestEditor }
+  { path: '/login', component: Login }
 ]
 
 const router = new VueRouter({

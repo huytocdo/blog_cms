@@ -3,10 +3,10 @@ import store from './store/store';
 import { router } from './routes';
 
 import App from './App.vue'
-import './plugins/element.js'
+import './plugins/element';
+import './plugins/env';
 
 Vue.config.productionTip = false
-
 new Vue({
   router,
   store,

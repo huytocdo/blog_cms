@@ -41,12 +41,12 @@ const routes = [
         component: PostList
       },
       {
-        path: 'post-list',
+        path: 'post',
         name: 'Quản lý bài viết',
         component: PostList
       },
       {
-        path: 'create-new-post',
+        path: 'post/create',
         name: 'Tạo bài viết mới',
         component: PostCreateNew
       },

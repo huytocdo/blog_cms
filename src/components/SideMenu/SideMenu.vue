@@ -15,11 +15,11 @@
           <i class="el-icon-notebook-2"></i>
           <span slot="title" >Bài Viết</span>
         </template>
-        <el-menu-item index="/dashboard/create-new-post">
+        <el-menu-item index="/dashboard/post/create">
           <i class="el-icon-plus"></i>
           <span>Tạo bài viết mới</span>
         </el-menu-item>
-        <el-menu-item index="/dashboard/post-list">
+        <el-menu-item index="/dashboard/post">
           <i class="el-icon-menu"></i>
           <span>Quản lý</span>
         </el-menu-item>

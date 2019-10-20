@@ -2,12 +2,12 @@
 <div>
   <h2>Categories</h2>
   <el-tag
-    :key="tag"
-    v-for="tag in dynamicTags"
+    :key="tag._id"
+    v-for="tag in category"
     closable
     :disable-transitions="false"
     @close="handleClose(tag)">
-    {{tag}}
+    {{tag.name}}
   </el-tag>
   <el-autocomplete
     class="input-new-tag"
@@ -20,24 +20,39 @@
     @keyup.enter.native="handleInputConfirm"
     @keyup.esc.native="handleInputClear"
   >
+    <template slot-scope="{ item }">
+      <div>{{ item.name }}</div>
+    </template>
   </el-autocomplete>
-  <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+  <el-button v-else class="button-new-tag" size="small" @click="showInput" :class="{'is-error': isError}">+ New Tag</el-button>
 </div>
 </template>
 
 <script>
 import {Input, Button, Tag, Row, Autocomplete} from 'element-ui';
 export default {
+  props: ['categories', 'category', 'isError'],
   data() {
     return {
-      dynamicTags: [],
       inputVisible: false,
       inputValue: ''
     };
   },
   methods: {
     handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      this.$emit('deleteTag', this.category.indexOf(tag))
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if(inputValue) {
+        const {categories, category} = this;
+        const newCategory = categories.find(el => el.name === inputValue);
+        if (newCategory && !category.some(e => newCategory._id === e._id)) {
+          this.$emit('addTag', newCategory);
+        }
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     },
 
     handleInputClear() {
@@ -52,47 +67,23 @@ export default {
       });
     },
 
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = '';
-    },
 
     querySearch(queryString, cb) {
-      var links = this.links;
-      var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      var categories = this.categories;
+      var results = queryString ? categories.filter(this.createFilter(queryString)) : categories;
       // call callback function to return suggestions
       cb(results);
     },
 
     createFilter(queryString) {
-      return (link) => {
-        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      return (category) => {
+        return (category.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-
-    loadAll() {
-      return [
-        { "value": "vue", "link": "https://github.com/vuejs/vue" },
-        { "value": "element", "link": "https://github.com/ElemeFE/element" },
-        { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-        { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-        { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-        { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-        { "value": "babel", "link": "https://github.com/babel/babel" }
-      ];
-    },
     handleSelect(item) {
-      this.inputValue = item.value;
+      this.inputValue = item.name;
       this.handleInputConfirm();
-      console.log(item);
     }
-  },
-  mounted() {
-    this.links = this.loadAll();
   },
   components: {
     elInput: Input,
@@ -115,6 +106,9 @@ export default {
     line-height: 30px;
     padding-top: 0;
     padding-bottom: 0;
+  }
+  .button-new-tag.is-error {
+    border: 1px solid red;
   }
   .input-new-tag input {
     width: 120px !important;

@@ -36,7 +36,7 @@ export default {
       defaultOptions: {
         forcePlainText: false,
         placeholder: {
-          text: "Write something great!!"
+          text: ""
         },
         toolbar: {
           buttons: ["bold", "italic", "quote", "h1", "h2", "h3", "h4", "h5"]

@@ -57,9 +57,10 @@
       fixed="right"
       label="Operations"
     >
-        <el-button type="info" icon="el-icon-view" circle></el-button>
-        <el-button type="primary" icon="el-icon-edit" circle></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
+      <template slot-scope="scope">
+        <el-button type="primary" icon="el-icon-edit" circle @click="operationHandler('edit', scope.row)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle @click="operationHandler('delete', scope.row)"></el-button>
+      </template>
     </el-table-column>
   </el-table>
 </div>
@@ -84,7 +85,8 @@ export default {
   },
   methods: {
     ...mapActions('post', {
-      getAllPost: 'GET_ALL_POSTS'
+      getAllPost: 'GET_ALL_POSTS',
+      deletePost: 'DELETE_POST'
     }),
     ...mapActions('category', {
       getAllCategory: 'GET_ALL_CATEGORIES'
@@ -98,6 +100,43 @@ export default {
       style.fontSize = '18px';
       style.color = '#333';
       return style;
+    },
+    operationHandler(type, data) {
+      switch (type) {
+        case 'edit':
+          this.editHandler(data);
+          break;
+        case 'delete':
+          this.deleteHandler(data);
+          break;
+        default:
+          break;
+      }
+    },
+    editHandler(data) {
+      this.$router.push(`post/edit/${data._id}`);
+    },
+    deleteHandler(data) {
+      this.$confirm('This will delete the post. Continue?', 'Warning', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          await this.deletePost({id: data._id});
+          await this.getAllPost();
+          this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          });
+        } catch (error) {
+          this.$message({
+            type: 'error',
+            message: 'Delete error'
+          });
+        }
+
+      })
     }
   },
   computed: {

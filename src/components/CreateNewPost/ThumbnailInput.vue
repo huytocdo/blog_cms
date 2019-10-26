@@ -29,17 +29,23 @@ export default {
       previewImg: '',
     }
   },
+  watch: {
+    file: function(newFile) {
+      if(!newFile) return this.previewImg = '';
+      if(typeof newFile === 'string') return this.previewImg = newFile;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewImg = e.target.result;
+      }
+      reader.readAsDataURL(newFile);
+    }
+  },
   methods: {
     inputChangeHandler(e) {
       const input = this.$refs.fileInput;
       if(input.files && input.files[0]) {
-        const reader = new FileReader();
         const file = input.files[0];
         this.$emit('fileChange', file)
-        reader.onload = (e) => {
-          this.previewImg = e.target.result;
-        }
-        reader.readAsDataURL(file);
       }
     },
     deleteFileHandler() {

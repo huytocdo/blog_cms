@@ -4,6 +4,7 @@
     <medium-editor
     :class="{'is-error': errorFields.html}" 
     v-model="html"
+    :prefill="prefill"
     :readOnly="false"
     :options="options" />
   </el-col>
@@ -47,8 +48,8 @@
       @changeRelatedPost="changeRelatedPost"
     ></app-related-post-input>
     <el-row type="flex" justify="end" class="cta-row">
-      <el-button plain @click="createNewPost('draft')" :disabled="loading">Save</el-button>
-      <el-button type="primary" @click="createNewPost('published')" :disabled="loading">Publish</el-button>
+      <el-button plain @click="editPost('draft')" :disabled="loading">Save Change</el-button>
+      <el-button type="primary" @click="editPost('published')" :disabled="loading">Publish Change</el-button>
     </el-row>
   </el-col>
 </el-row>
@@ -65,30 +66,23 @@ import RelatedPostInput from '@/components/CreateNewPost/RelatedPostInput.vue';
 import * as apiResource from '@/service/api/upload';
 import * as apiPost from '@/service/api/post';
 import {makeID} from '@/utils/makeRandom';
+import _ from 'underscore';
 
 
 const apiDomain = process.env.VUE_APP_API_DOMAIN;
 export default {
   name: 'create-new-post',
+  props: ['id'],
   data() {
     return {
-      html: ``,
-      options: {
-        customAction: async({file}, component) => {
-          const {data} = await apiResource.uploadImage(file, makeID(5));
-          const link = `${apiDomain}${data.data.data.link}`
-          component.files[0].response.url = link;
-        },
-        placeholder: {
-          text: "Write something great!!"
-        },
-      },
       title: ``,
       description: ``,
       duration: ``,
+      thumbnail: null,
       category: [],
       related: [],
-      thumbnail: null,
+      html: ``,
+      prefill: ``,
       rules: {
         html: ['required'],
         title: ['required'],
@@ -97,8 +91,15 @@ export default {
         categories: ['required'],
         thumbnail: ['required'],
       },
+      options: {
+        customAction: async({file}, component) => {
+          const {data} = await apiResource.uploadImage(file, makeID(5));
+          const link = `${apiDomain}${data.data.data.link}`
+          component.files[0].response.url = link;
+        }
+      },
       errorFields: {},
-      loading: false
+      loading: true
     }
   },
   computed: {
@@ -159,8 +160,8 @@ export default {
       }
       return validResult;
     },
-    async createNewPost(status) {
-      const {title, description, duration, html, category, thumbnail, related} = this,
+    async editPost(status) {
+      const {title, description, duration, html, category, thumbnail, related, id} = this,
         newPostData = {};
       this.loading = true;
       this.errorFields = {};
@@ -175,14 +176,15 @@ export default {
       const validResult = this.validator(newPostData, this.rules);
       if(Object.keys(validResult).length === 0) {
         try {
-          const {data} = await apiResource.uploadImage(thumbnail, makeID(5));
-          newPostData.thumbnail = `${apiDomain}${data.data.data.link}`;
-          await apiPost.createNew(newPostData);
+          if(typeof thumbnail !== 'string') {
+            const {data} = await apiResource.uploadImage(thumbnail, makeID(5));
+            newPostData.thumbnail = `${apiDomain}${data.data.data.link}`;
+          }
+          await apiPost.editPost(id, newPostData);
           this.$message({
             message: 'Bài đã được lưu thành công',
             type: 'success',
             onClose: () => {
-              console.log(this.$router);
               this.$router.push('/dashboard/post')
             }
           });
@@ -208,10 +210,22 @@ export default {
     appThumbnailInput: ThumbnailInput,
     appRelatedPostInput: RelatedPostInput
   },
-  mounted() {
+  async mounted() {
     this.getAllCategory();
     this.getAllPost();
-  }
+    const rawPost = await apiPost.getPost(this.id);
+    const post = _.property(['data', 'data', 'data'])(rawPost);
+    if(post) {
+      this.title = post.title;
+      this.description = post.description;
+      this.duration = post.duration;
+      this.thumbnail = post.thumbnail;
+      this.category = post.categories;
+      this.related = post.related.map(el => el._id);
+      this.prefill = this.html = post.html;
+    }
+    this.loading = false;
+}
 }
 </script>
 

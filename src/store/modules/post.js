@@ -42,6 +42,17 @@ const actions = {
       commit('SET_ERROR', err);
       return false;
     }
+  },
+  async 'DELETE_POST'({commit}, {id}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      await post.deletePost(id);
+      commit('CLEAR_LOADING');
+    } catch (error) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', error);
+    }
   }
 }
 

@@ -6,6 +6,7 @@ const Login = () => import('./views/Login.vue');
 const Dashboard = () => import('./views/Dashboard/Dashboard.vue');
 const PostList = () => import('./views/Dashboard/PostList.vue');
 const PostCreateNew = () => import('./views/Dashboard/PostCreateNew.vue');
+const PostEdit = () => import('./views/Dashboard/PostEdit.vue');
 const ImageList = () => import('./views/Dashboard/ImageList.vue');
 const ImageUploadNew = () => import('./views/Dashboard/ImageUploadNew.vue');
 const CategoryList = () => import('./views/Dashboard/CategoryList.vue');
@@ -49,6 +50,12 @@ const routes = [
         path: 'post/create',
         name: 'Tạo bài viết mới',
         component: PostCreateNew
+      },
+      {
+        path: 'post/edit/:id',
+        name: 'Chỉnh sửa bài viết',
+        component: PostEdit,
+        props: true
       },
       {
         path: 'image-list',

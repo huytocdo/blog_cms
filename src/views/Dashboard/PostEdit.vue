@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import _ from 'underscore';
 import {Row, Col, Input, Button} from 'element-ui';
 import {mapActions, mapGetters} from 'vuex';
 
@@ -66,8 +67,6 @@ import RelatedPostInput from '@/components/CreateNewPost/RelatedPostInput.vue';
 import * as apiResource from '@/service/api/upload';
 import * as apiPost from '@/service/api/post';
 import {makeID} from '@/utils/makeRandom';
-import _ from 'underscore';
-
 
 const apiDomain = process.env.VUE_APP_API_DOMAIN;
 export default {

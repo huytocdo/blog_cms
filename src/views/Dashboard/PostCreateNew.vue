@@ -182,7 +182,6 @@ export default {
             message: 'Bài đã được lưu thành công',
             type: 'success',
             onClose: () => {
-              console.log(this.$router);
               this.$router.push('/dashboard/post')
             }
           });

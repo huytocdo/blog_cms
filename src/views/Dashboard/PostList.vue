@@ -135,7 +135,6 @@ export default {
             message: 'Delete error'
           });
         }
-
       })
     }
   },

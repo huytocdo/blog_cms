@@ -5,16 +5,18 @@
       <el-input v-model="name" ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit(name)" :disabled="loading">Tạo</el-button>
+      <el-button type="primary" @click="onSubmit(name)" :disabled="loading">Sửa</el-button>
     </el-form-item>
   </el-form>
 </div>
 </template>
 
 <script>
+import _ from 'underscore';
 import {Input, Form, FormItem, Button} from 'element-ui';
 import {mapState, mapActions, mapGetters} from 'vuex';
 export default {
+  props: ['id'],
   data() {
     return {
       name: ``
@@ -28,7 +30,8 @@ export default {
   },
   methods: {
     ...mapActions('category', {
-      createCategory: 'CREATE_CATEGORY'
+      editCategory: 'EDIT_CATEGORY',
+      getCategory: 'GET_CATEGORY'
     }),
     async onSubmit(name) {
       if(!name) {
@@ -39,8 +42,11 @@ export default {
         });
         return;
       }
+      const data = { name },
+        id = this.id,
+        payload = { data, id };
       try {
-        await this.createCategory({name: this.name});
+        await this.editCategory(payload);
         this.$message({
           message: 'Tạo danh mục thành công',
           type: 'success',
@@ -58,12 +64,17 @@ export default {
       }
     }
   },
+  async mounted() {
+    const rawCategory = await this.getCategory({id: this.id});
+    const name = _.property(['data', 'data', 'name'])(rawCategory);
+    this.name = name;
+  },
   components: {
     elInput: Input,
     elForm: Form,
     elFormItem: FormItem,
     elButton: Button
-  },
+  }
 }
 </script>
 

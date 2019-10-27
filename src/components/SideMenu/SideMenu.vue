@@ -29,11 +29,11 @@
           <i class="el-icon-collection"></i>
           <span slot="title">Category</span>
         </template>
-        <el-menu-item index="/dashboard/create-new-category">
+        <el-menu-item index="/dashboard/category/create">
           <i class="el-icon-plus"></i>
           <span>Tạo category mới</span>
         </el-menu-item>
-        <el-menu-item index="/dashboard/category-list">
+        <el-menu-item index="/dashboard/category">
           <i class="el-icon-menu"></i>
           <span>Quản lý</span>
         </el-menu-item>

@@ -11,6 +11,7 @@ const ImageList = () => import('./views/Dashboard/ImageList.vue');
 const ImageUploadNew = () => import('./views/Dashboard/ImageUploadNew.vue');
 const CategoryList = () => import('./views/Dashboard/CategoryList.vue');
 const CategoryCreateNew = () => import('./views/Dashboard/CategoryCreateNew.vue');
+const CategoryEdit = () => import('./views/Dashboard/CategoryEdit.vue');
 
 Vue.use(VueRouter);
 
@@ -68,14 +69,20 @@ const routes = [
         component: ImageUploadNew
       },
       {
-        path: 'category-list',
+        path: 'category',
         name: 'Quản lý danh mục',
         component: CategoryList
       },
       {
-        path: 'create-new-category',
+        path: 'category/create',
         name: 'Tạo danh mục mới',
         component: CategoryCreateNew
+      },
+      {
+        path: 'category/edit/:id',
+        name: 'Sửa danh mục',
+        component: CategoryEdit,
+        props: true
       },
     ] 
   },

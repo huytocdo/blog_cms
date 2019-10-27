@@ -42,6 +42,52 @@ const actions = {
       commit('SET_ERROR', err);
       return false;
     }
+  },
+  async 'GET_CATEGORY'({commit}, {id}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      const {status, data} = await category.getCategory(id);
+      commit('CLEAR_LOADING');
+      console.log(data, status);
+      return data;
+    } catch (err) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', err);
+    }
+  },
+  async 'DELETE_CATEGORY'({commit}, {id}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      await category.deleteCategory(id);
+      commit('CLEAR_LOADING');
+    } catch (error) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', error);
+    }
+  },
+  async 'CREATE_CATEGORY'({commit}, data) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      await category.createNew(data);
+      commit('CLEAR_LOADING');
+    } catch (error) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', error);
+    }
+  },
+  async 'EDIT_CATEGORY'({commit}, {id, data}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      await category.editCategory(id, data);
+      commit('CLEAR_LOADING');
+    } catch (error) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', error);
+    }
   }
 }
 

@@ -61,15 +61,14 @@
 </template>
 
 <script>
-import { Aside, Submenu, MenuItem, MenuItemGroup } from 'element-ui';
+import { Aside, Submenu, MenuItem } from 'element-ui';
 import Menu from './CustomMenuElementUI.vue';
 export default {
   components: {
     elAside: Aside,
     elCustomMenu: Menu,
     elSubmenu: Submenu,
-    elMenuItem: MenuItem,
-    elMenuItemGroup: MenuItemGroup
+    elMenuItem: MenuItem
   },
   props: ['isCollapse', 'logout'],
   methods: {

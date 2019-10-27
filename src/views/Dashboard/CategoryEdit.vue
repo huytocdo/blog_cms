@@ -14,7 +14,7 @@
 <script>
 import _ from 'underscore';
 import {Input, Form, FormItem, Button} from 'element-ui';
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 export default {
   props: ['id'],
   data() {

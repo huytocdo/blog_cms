@@ -47,9 +47,8 @@ const actions = {
     try {
       commit('CLEAR_ERROR');
       commit('SET_LOADING');
-      const {status, data} = await category.getCategory(id);
+      const { data } = await category.getCategory(id);
       commit('CLEAR_LOADING');
-      console.log(data, status);
       return data;
     } catch (err) {
       commit('CLEAR_LOADING');

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authenStore from '@/store/modules/authenticate';
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL
+  baseURL: '/api/v1'
 });
 
 axiosInstance.interceptors.request.use(function(config) {

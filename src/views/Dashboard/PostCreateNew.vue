@@ -66,8 +66,6 @@ import * as apiResource from '@/service/api/upload';
 import * as apiPost from '@/service/api/post';
 import {makeID} from '@/utils/makeRandom';
 
-
-const apiDomain = process.env.VUE_APP_API_DOMAIN;
 export default {
   name: 'create-new-post',
   data() {
@@ -76,7 +74,7 @@ export default {
       options: {
         customAction: async({file}, component) => {
           const {data} = await apiResource.uploadImage(file, makeID(5));
-          const link = `${apiDomain}${data.data.data.link}`
+          const link = `${data.data.data.link}`
           component.files[0].response.url = link;
         },
         placeholder: {
@@ -176,7 +174,7 @@ export default {
       if(Object.keys(validResult).length === 0) {
         try {
           const {data} = await apiResource.uploadImage(thumbnail, makeID(5));
-          newPostData.thumbnail = `${apiDomain}${data.data.data.link}`;
+          newPostData.thumbnail = `${data.data.data.link}`;
           await apiPost.createNew(newPostData);
           this.$message({
             message: 'Bài đã được lưu thành công',

@@ -11,3 +11,11 @@ export const login = (email, password) => {
 export const logout = () => {
   return api.get('/users/logout');
 }
+
+export const getUserInfo = () => {
+  return api.get('/users/me', {
+    validateStatus: function(status) {
+      return status >=200 && status < 500;
+    }
+  })
+}

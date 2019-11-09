@@ -6,9 +6,12 @@ import App from './App.vue'
 import './plugins/element';
 import './plugins/env';
 
-Vue.config.productionTip = false
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app')
+store.dispatch("authenticate/GET_USER_INFO").then(() => {
+  Vue.config.productionTip = false
+  new Vue({
+    router,
+    store,
+    render: h => h(App),
+  }).$mount('#app')
+});
+

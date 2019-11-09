@@ -46,8 +46,8 @@ import AppHeader from '@/components/Header/Header.vue';
       toggleCollapse() {
         this.isCollapse = !this.isCollapse;
       },
-      logout() {
-        if(this.logoutStore()) {
+      async logout() {
+        if(await this.logoutStore()) {
           this.$router.push('/login');
         } else {
           //TODO ERROR

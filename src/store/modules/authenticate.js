@@ -1,22 +1,12 @@
 import * as authenApi from '@/service/api/authenticate';
-import Cookies from "js-cookie";
+
 const state = {
-  token: Cookies.get('jwt') || '',
   user: null,
   errorMsg: '',
   loading: false
 }
 
 const mutations = {
-  'SET_TOKEN'(state, {token, expires}) {
-    expires = parseInt(expires, 10);
-    Cookies.set('jwt', token, {expires: expires})
-    state.token = token;
-  },
-  'CLEAR_TOKEN'(state) {
-    Cookies.remove('jwt')
-    state.token = '';
-  },
   'SET_USER'(state, user) {
     state.user = user;
   },
@@ -45,7 +35,6 @@ const actions = {
       const {status, data} = await authenApi.login(email, password);
       commit('CLEAR_LOADING');
       if(status === 200) {
-        commit('SET_TOKEN', { token: data.token, expires: data.expires });
         commit('SET_USER', data.data.user);
         return true;
       } else {
@@ -66,14 +55,30 @@ const actions = {
       commit('CLEAR_LOADING');
       if(status === 200) {
         commit('CLEAR_USER');
-        commit('CLEAR_TOKEN');
         return true;
       }
-      console.log(status, data)
     } catch(err) {
       commit('CLEAR_LOADING');
       commit('CLEAR_USER');
-      commit('CLEAR_TOKEN');
+      commit('SET_ERROR', err);
+      return false;
+    }
+  },
+  async 'GET_USER_INFO'({commit}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      const {status, data} = await authenApi.getUserInfo();
+      commit('CLEAR_LOADING');
+      if(status === 200) {
+        commit('SET_USER', data.data.user);
+        return true;
+      }  else {
+        commit('SET_ERROR', data.message);
+        return false
+      }
+    } catch(err) {
+      commit('CLEAR_LOADING');
       commit('SET_ERROR', err);
       return false;
     }
@@ -85,7 +90,7 @@ const getters = {
     return state.token
   },
   isLogin: state => {
-    return !!state.token
+    return !!state.user
   }
 }
 

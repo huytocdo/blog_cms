@@ -52,7 +52,7 @@
           <span>Quản lý</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item @click="logout" index="/logout">
+      <el-menu-item @click="logout">
         <i class="el-icon-close"></i>
         <span>Đăng xuất</span>
       </el-menu-item>

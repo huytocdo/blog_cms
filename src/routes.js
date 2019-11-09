@@ -14,9 +14,9 @@ const CategoryCreateNew = () => import('./views/Dashboard/CategoryCreateNew.vue'
 const CategoryEdit = () => import('./views/Dashboard/CategoryEdit.vue');
 
 Vue.use(VueRouter);
-
 const protectRoute = (redirect, query) => {
   return (to, from, next) => {
+    // await store.dispatch('authenticate/GET_USER_INFO');
     const isLogin = store.getters['authenticate/isLogin'];
     if (isLogin) {
       next()
@@ -94,7 +94,7 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const isLogin = store.getters['authenticate/isLogin'];
   if(to.path !== '/login') {
     if(!isLogin) {

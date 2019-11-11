@@ -13,12 +13,12 @@
       fixed
       prop="title"
       label="Tiêu đề bài viết"
-      width="550">
+      width="400">
     </el-table-column>
     <el-table-column
       prop="slug"
       label="Đường dẫn bài viết"
-      width="450">
+      width="400">
     </el-table-column>
     <el-table-column
       prop="thumbnail"
@@ -62,19 +62,38 @@
         <el-button type="danger" icon="el-icon-delete" circle @click="operationHandler('delete', scope.row)"></el-button>
       </template>
     </el-table-column>
+    <el-table-column
+      label="Status"
+    >
+      <template slot-scope="scope">
+        <el-switch 
+          :value="scope.row.status"
+          active-value="published"
+          inactive-value="draft"
+          active-text="Published"
+          @change="switchStatusHandler($event, scope.row)">
+        </el-switch>
+      </template>
+    </el-table-column>
   </el-table>
 </div>
 </template>
 
 <script>
-import { Table, TableColumn, Button, Tag } from 'element-ui';
+import { Table, TableColumn, Button, Tag, Switch, Dialog } from 'element-ui';
 import {mapActions, mapState, mapGetters} from 'vuex';
 export default {
+  data() {
+    return {
+      height: undefined
+    }
+  },
   components: {
     elTable: Table,
     elTableColumn: TableColumn,
     elButton: Button,
-    elTag: Tag
+    elTag: Tag,
+    elSwitch: Switch
   },
   filters: {
     formatDateTime: function(value) {
@@ -86,7 +105,8 @@ export default {
   methods: {
     ...mapActions('post', {
       getAllPost: 'GET_ALL_POSTS',
-      deletePost: 'DELETE_POST'
+      deletePost: 'DELETE_POST',
+      editPostStatus: 'EDIT_POST_STATUS'
     }),
     ...mapActions('category', {
       getAllCategory: 'GET_ALL_CATEGORIES'
@@ -136,6 +156,9 @@ export default {
           });
         }
       })
+    },
+    switchStatusHandler(status, {id}) {
+      this.editPostStatus({id, status})
     }
   },
   computed: {
@@ -160,11 +183,6 @@ export default {
           value: e.slug
         }
       })
-    }
-  },
-  data() {
-    return {
-      height: undefined,
     }
   },
   mounted() {

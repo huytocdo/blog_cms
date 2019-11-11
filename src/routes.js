@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import store from '@/store/store';
 
 const Login = () => import('./views/Login.vue');
+const DashboardLayout = () => import('./views/Dashboard/_DashboardLayout.vue');
 const Dashboard = () => import('./views/Dashboard/Dashboard.vue');
 const PostList = () => import('./views/Dashboard/PostList.vue');
 const PostCreateNew = () => import('./views/Dashboard/PostCreateNew.vue');
@@ -16,15 +17,20 @@ const CategoryEdit = () => import('./views/Dashboard/CategoryEdit.vue');
 Vue.use(VueRouter);
 const protectRoute = (redirect, query) => {
   return (to, from, next) => {
-    // await store.dispatch('authenticate/GET_USER_INFO');
     const isLogin = store.getters['authenticate/isLogin'];
     if (isLogin) {
       next()
       return
     }
     if(query) {
-      const query = to.path;
-      next({path: redirect, query: {redirect: query}});
+      const redirectTo = to.path;
+      const toOption = {
+        path: redirect,
+        query: {
+          redirect: redirectTo
+        }
+      }
+      next(toOption);
     } 
     next({path: redirect});
   }
@@ -34,13 +40,13 @@ const routes = [
   { path: '/', redirect: '/dashboard'},
   { 
     path: '/dashboard', 
-    component: Dashboard, 
+    component: DashboardLayout, 
     beforeEnter: protectRoute('/login', true), 
     children: [
       {
         path: '',
         name: 'Dashboard',
-        component: PostList
+        component: Dashboard
       },
       {
         path: 'post',
@@ -92,21 +98,6 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes
-})
-
-router.beforeEach(async (to, from, next) => {
-  const isLogin = store.getters['authenticate/isLogin'];
-  if(to.path !== '/login') {
-    if(!isLogin) {
-      next(`/login?redirect=${to.path}`);
-    }
-  }
-  if(to.path === '/login') {
-    if(isLogin) {
-      next(`/dashboard`);
-    }
-  }
-  next();
 })
 
 export {router};

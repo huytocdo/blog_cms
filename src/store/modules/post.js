@@ -1,4 +1,5 @@
 import * as post from '@/service/api/post';
+import _ from 'underscore';
 const state = {
   loading: false,
   errorMsg: '',
@@ -21,6 +22,9 @@ const mutations = {
   'CLEAR_ERROR'(state) {
     state.errorMsg = null;
   },
+  'SET_POST'(state, {id, postData}) {
+    _.extend(_.findWhere(state.posts, {id}), postData);
+  }
 }
 
 const actions = {
@@ -52,6 +56,25 @@ const actions = {
     } catch (error) {
       commit('CLEAR_LOADING');
       commit('SET_ERROR', error);
+    }
+  },
+  async 'EDIT_POST_STATUS'({commit}, {id, status}) {
+    try {
+      commit('CLEAR_ERROR');
+      commit('SET_LOADING');
+      const {status: statusCode, data} = await post.editPost(id, {status})
+      commit('CLEAR_LOADING');
+      if(statusCode === 200) {
+        commit('SET_POST', {id, postData: data.data.data}); // BAD
+        return true;
+      } else {
+        commit('SET_ERROR', data.message);
+        return false;
+      }
+    } catch (err) {
+      commit('CLEAR_LOADING');
+      commit('SET_ERROR', err);
+      return false;
     }
   }
 }
